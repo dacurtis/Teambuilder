@@ -1,19 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package teambuilder;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- *
- * @author David Curtis
- */
+import com.googlecode.jcsv.reader.CSVReader;
+import com.googlecode.jcsv.reader.internal.CSVReaderBuilder;
+
 public class Teambuilder {
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+        try {
+			FileReader file = new FileReader("WebJam Application.csv");
+			CSVReader<String[]> csvParser = CSVReaderBuilder.newDefaultReader(file);
+			List<String[]> persons = csvParser.readAll();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 }

@@ -1,45 +1,38 @@
+import java.util.ArrayList;
+
 /* Person.java
  * 
  * Stores the name, score, and an array of requested People
  * for a single Person
  */
 
-public class Person {
+public class Person 
+{
 	private String name;
-	private int score;
-	private String[] requestedPeople;
+	private String email;
+	private int ranking;
+	private ArrayList<String> requestedPeople;
 	
-	public Person(String name, int score, String[] requestedPeople)
-	{
+	public Person(String name, String email,  int ranking) {
 		this.name = name;
-		this.score = score;
-		this.requestedPeople = requestedPeople;
+		this. email = email;
+		this.ranking = ranking;
+		this.requestedPeople = new ArrayList<String>();
 	}
-	public String getName(){
+	
+	public String getName() {
 		return name;
 	}
-	public int getScore(){
-		return score;
-	}
-	public String[] getRequested(){
-		return requestedPeople;
-	}
-	public void addRequested(String name){
-		ensureCapacity(requestedPeople.length +1);
-		requestedPeople[requestedPeople.length] =  name;
+	
+	public int getRanking() {
+		return ranking;
 	}
 	
-	//Increase size of array of requestedPeople if needed.
-	private void ensureCapacity (int minCapacity) {
-		int oldCapacity = requestedPeople.length;
-		if (minCapacity > oldCapacity) {
-			String old[] = requestedPeople;
-			int newCapacity = 2*oldCapacity;
-			if (newCapacity < minCapacity)
-				newCapacity = minCapacity;
-			requestedPeople = new String[newCapacity];
-			for(int i = 0; i < oldCapacity; i++)
-				requestedPeople[i] = old[i];
-		}
-	}  
+	public ArrayList<String> getRequested(){
+		return requestedPeople;
+	}
+	
+	public void addRequested(String name){
+		requestedPeople.add(name);
+	}
 }
