@@ -10,9 +10,15 @@ import com.googlecode.jcsv.reader.internal.CSVReaderBuilder;
 public class Teambuilder {
     public static void main(String[] args) {
         try {
-			FileReader file = new FileReader("WebJam Application.csv");
+        	System.out.println(args[0]);
+        	FileReader file = new FileReader(args[0]);
 			CSVReader<String[]> csvParser = CSVReaderBuilder.newDefaultReader(file);
 			List<String[]> persons = csvParser.readAll();
+			
+			for (String [] row : persons) {
+				System.out.println(row[0]);
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
