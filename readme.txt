@@ -1,1 +1,1 @@
-This is the readme for Teambuilder app
+CSv Reader instructions: http://code.google.com/p/jcsv/wiki/CSVReader#Introduction
