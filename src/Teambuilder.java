@@ -13,10 +13,20 @@ public class Teambuilder {
         	System.out.println(args[0]);
         	FileReader file = new FileReader(args[0]);
 			CSVReader<String[]> csvParser = CSVReaderBuilder.newDefaultReader(file);
-			List<String[]> persons = csvParser.readAll();
 			
-			for (String [] row : persons) {
-				System.out.println(row[0]);
+			//List of String[], at index 0 of the String[], it will contain all
+			//the information in a row. So each String[0] is equavialent to a row
+			//in the spreadsheet.
+			List<String[]> fileContents = csvParser.readAll();
+			
+			//Need to call parser method to parse information.
+			
+			//Debugging purposes here to see how the csv parser works.
+			int i = 1;
+			for (String[] strings : fileContents) {
+				System.out.println("Row number: " + i);
+				//Each row is stored at index 0.
+				System.out.println(strings[0]);
 			}
 			
 		} catch (IOException e) {
