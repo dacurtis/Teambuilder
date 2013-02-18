@@ -1,5 +1,11 @@
 
+import com.googlecode.jcsv.reader.CSVReader;
+import com.googlecode.jcsv.reader.internal.CSVReaderBuilder;
 import java.awt.FileDialog;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -70,7 +76,7 @@ public class Frame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel1)
@@ -79,21 +85,22 @@ public class Frame extends javax.swing.JFrame {
                             .addComponent(outputFileLabel)
                             .addComponent(jLabel5)
                             .addComponent(inputFileLabel))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(inputFileButton)
-                            .addComponent(numTeamsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(outputFileButton))))
-                .addContainerGap(174, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(171, Short.MAX_VALUE)
-                .addComponent(goButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(145, 145, 145))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(numTeamsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(90, 90, 90)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(inputFileButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(outputFileButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(goButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(28, 28, 28)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -109,9 +116,9 @@ public class Frame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(numTeamsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(36, 36, 36)
+                .addGap(33, 33, 33)
                 .addComponent(goButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();
@@ -122,7 +129,7 @@ public class Frame extends javax.swing.JFrame {
         fd.setVisible(true);
         if (fd.getFile() != null){
             inputPath = fd.getDirectory() + fd.getFile();
-            inputFileLabel.setText(inputPath);
+            inputFileLabel.setText(fd.getFile());
         }   
     }//GEN-LAST:event_inputFileButtonActionPerformed
 
@@ -131,7 +138,7 @@ public class Frame extends javax.swing.JFrame {
         fd.setVisible(true);
         if (fd.getFile() != null){
             outputPath = fd.getDirectory() + fd.getFile();
-            inputFileLabel.setText(outputPath);
+            outputFileLabel.setText(fd.getFile());
         }   
     }//GEN-LAST:event_outputFileButtonActionPerformed
 
@@ -145,6 +152,23 @@ public class Frame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Must be at least 2 teams", "Please select the number of teams", JOptionPane.WARNING_MESSAGE);
             return;
         }
+         try {
+        	FileReader file = new FileReader(inputPath);
+			CSVReader<String[]> csvParser = CSVReaderBuilder.newDefaultReader(file);
+			
+			//List of String[], at index 0 of the String[], it will contain all
+			//the information in a row. So each String[0] is equavialent to a row
+			//in the spreadsheet.
+			List<String[]> fileContents = csvParser.readAll();
+			
+			//Need to call parser method to parse information.
+			Parser toParse = new Parser(fileContents);
+			
+			ArrayList<Person> peopleToSort = toParse.parseForPeople();
+			
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(this, "IOException thrown while reading input file", "Error", JOptionPane.ERROR_MESSAGE);
+		}
     }//GEN-LAST:event_goButtonActionPerformed
 
     public static void main(String args[]) {

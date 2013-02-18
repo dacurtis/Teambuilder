@@ -1,5 +1,7 @@
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Sorter {
@@ -39,6 +41,19 @@ public class Sorter {
         }
         people = sorted;
     }
+    private void sortTeams() {
+        ArrayList<Team> sorted = new ArrayList<Team>();
+        for (int i = 0; i < teams.size(); i++) {
+            for (int sortedPointer = 0; sortedPointer < sorted.size(); sortedPointer++) {
+                if (sorted.get(sortedPointer).value < teams.get(i).value) {
+                    sorted.add(sortedPointer, teams.get(i));
+                    break;
+                }
+            }
+            sorted.add(teams.get(i));
+        }
+        teams = sorted;
+    }
     public ArrayList<Team> makeTeams(){
         int counter = 0;
         int direction = 1;
@@ -55,11 +70,53 @@ public class Sorter {
                 flipped = false;
             }
         }
+        sortTeams();
         //step two: make networks
         
         
+        //step 3: make swaps
+
+        while (!isDone()) {
+            Team highest = teams.get(0);
+            Team lowest = teams.get(teams.size() - 1);
+            for (int i = 0; i < teams.size() - 1; i++) {
+
+            }
+        }
+        
         
         return teams;
+    }
+    private boolean softSwap(Team highest, Team lowest) {
+        int difference = highest.value - lowest.value;
+        int numAdvantage = highest.members.size() - lowest.members.size();
+//        int hStart = 0;
+//        int lStart = 0;
+//        //don't swap away all of a team's leaders
+//        if (highest.leaders == 1)
+//            hStart = 1;
+//        if (lowest.leaders == 1)
+//            lStart = 1;
+        
+        //Maps scores to possible groups of members
+        HashMap lowScoreMap = new HashMap();
+        HashMap highScoreArray = new HashMap();
+        for(int i =0; i < lowest.members.size();i++){
+            lowScoreMap.put(lowest.members.get(i).ranking, lowest.members.get(i));
+        }
+        return false;
+    }
+    private boolean isDone(){
+        for (Team team : teams){
+            if(team.value != teamScore && team.value != teamScore + 1)
+                return false;
+        }
+        return true;
+    }
+    class ScoreMap{
+        int[] scores;
+        
+        
     }
     
 }

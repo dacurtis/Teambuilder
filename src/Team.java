@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 
-public     class Team{
+public  class Team {
         ArrayList<Person> members;
         int value;
         int leaders;
@@ -44,4 +44,5 @@ public     class Team{
             }
             Sorter.sortList(members);
         }
+
     }

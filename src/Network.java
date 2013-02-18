@@ -21,14 +21,14 @@
             size += 1;
         }
 //        Can leave null networks, not done
-        public Person removeFromNetwork(int points){
-            if (network == null && self != points)
-                return null;
-   
-            if (ranking == points){
-                Person toReturn = self;
-                if (previous != null)
-                    previous.network = network;    
-            }
-        }
+//        public Person removeFromNetwork(int points){
+//            if (network == null && self != points)
+//                return null;
+//   
+//            if (ranking == points){
+//                Person toReturn = self;
+//                if (previous != null)
+//                    previous.network = network;    
+//            }
+//        }
     }
