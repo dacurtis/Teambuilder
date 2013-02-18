@@ -42,4 +42,9 @@ public class Person
 	public void addRequested(String name){
 		requestedPeople.add(name);
 	}
+	
+	//Will possibly be used to see if the request is mutual.
+	public boolean hasRequestedPerson(Person p){
+		return requestedPeople.contains(p);
+	}
 }
