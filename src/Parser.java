@@ -17,7 +17,7 @@ public class Parser {
 		//name, with the 3rd column being the email address.
 		//Trim removes the leading and trailing whitespace, if any. 
 		
-		//Need too add in code for adding people's requests.
+		//Need to add in code for adding people's requests.
 		for (int i = 1; i < fileToParse.size(); i++) {
 			String[] containsRow = fileToParse.get(i);
 			
