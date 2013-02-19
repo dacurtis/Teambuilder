@@ -26,20 +26,48 @@ public class Parser {
 		for(int i = 1; i < fileContents.size(); i++){
 			String[] row = fileContents.get(i);
 			
-			String name = row[1];
-			String email = row[2];
+			String name = row[1].trim();
+			String email = row[2].trim();
 			
 			String stringRanking = row[row.length - 1];
 			int ranking = checkRanking(stringRanking);
 			
 			Person personToAdd = new Person(name, email, ranking);
 			
-			System.out.println(row[columnWithRequestedNames]);
+			//Parse the names of the requested people and add them.
+			String stringOfNames = row[columnWithRequestedNames];
+			if (!stringOfNames.equals("")){
+				ArrayList<String> namesToAdd = getRequestedNames(stringOfNames);
+				for (String nameOfRequested : namesToAdd) {
+					personToAdd.addRequested(nameOfRequested);
+				}
+			}
 			
 			arrayOfPeople.add(personToAdd);
 		}
 		
 		return arrayOfPeople;
+	}
+	
+	//Alternatively, could pass along a person and directly add the requested
+	//names directly in here.
+	private ArrayList<String> getRequestedNames(String requestedNames){
+		ArrayList<String> separatedRequestedNames = new ArrayList<String>();
+		Scanner scanForNames = new Scanner(requestedNames);
+		
+		scanForNames.useDelimiter("\\s*and\\s*|,|\\n|\\.|\\!");
+		
+		while(scanForNames.hasNext()){
+			String nameToAdd = scanForNames.next().trim();
+			
+			if(!nameToAdd.equals("")){
+				separatedRequestedNames.add(nameToAdd);
+			}
+		}
+		
+		scanForNames.close();
+		
+		return separatedRequestedNames;
 	}
 	
 	private int findColumnWithRequestedPeople(){

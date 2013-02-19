@@ -12,8 +12,8 @@ public class Person
 	String email;
 	int ranking;
 	private ArrayList<String> requestedPeople;
-        ArrayList<Person> network;
-        boolean isLeader;
+    ArrayList<Person> network;
+    boolean isLeader;
 	
 	public Person(String name, String email,  int ranking) {
 		this.name = name;
