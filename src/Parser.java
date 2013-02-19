@@ -31,6 +31,8 @@ public class Parser {
 			
 			String stringRanking = row[row.length - 1];
 			int ranking = checkRanking(stringRanking);
+                        if (ranking == 0)
+                            continue;
 			
 			Person personToAdd = new Person(name, email, ranking);
 			
@@ -45,7 +47,13 @@ public class Parser {
 			
 			arrayOfPeople.add(personToAdd);
 		}
-		
+		for (Person person : arrayOfPeople){
+                    for(String name : person.getRequested())
+                        for(Person p : arrayOfPeople)
+                            if(p.name.equals(name))
+                                person.network.add(p);
+                       
+                }
 		return arrayOfPeople;
 	}
 	

@@ -1,5 +1,8 @@
 
+import au.com.bytecode.opencsv.CSVReader;
+import java.awt.Desktop;
 import java.awt.FileDialog;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,7 +10,10 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-
+/**
+ *
+ * @author David Curtis
+ */
 public class Frame extends javax.swing.JFrame {
     String inputPath  = null;  
     String outputPath = "Teams.csv";
@@ -80,9 +86,9 @@ public class Frame extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(outputFileLabel)
+                            .addComponent(outputFileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)
-                            .addComponent(inputFileLabel))
+                            .addComponent(inputFileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
@@ -102,13 +108,13 @@ public class Frame extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputFileLabel)
+                    .addComponent(inputFileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputFileButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(outputFileLabel)
+                    .addComponent(outputFileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(outputFileButton))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -147,26 +153,29 @@ public class Frame extends javax.swing.JFrame {
         }
         int numTeams = (Integer) numTeamsSpinner.getModel().getValue();
         if (numTeams <= 1){
-            JOptionPane.showMessageDialog(this, "Must be at least 2 teams", "Please select the number of teams", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "There must be at least 2 teams", "Please select the number of teams", JOptionPane.WARNING_MESSAGE);
             return;
         }
-         try {
-        	FileReader file = new FileReader(inputPath);
-//			CSVReader<String[]> csvParser = CSVReaderBuilder.newDefaultReader(file);
-//			
-//			//List of String[], at index 0 of the String[], it will contain all
-//			//the information in a row. So each String[0] is equavialent to a row
-//			//in the spreadsheet.
-//			List<String[]> fileContents = csvParser.readAll();
-//			
-//			//Need to call parser method to parse information.
-//			Parser toParse = new Parser(fileContents);
-//			
-//			ArrayList<Person> peopleToSort = toParse.parseForPeople();
+                 try {
+        	FileReader file = new FileReader(inputPath);  	
+        	CSVReader reader = new CSVReader(file);	
+        	List<String[]> fileContents = reader.readAll();
+        	
+			//Need to call parser method to parse information.
+			Parser toParse = new Parser(fileContents);
+			
+			ArrayList<Person> peopleToSort = toParse.parseForPeople();
+                        Sorter sorter = new Sorter(peopleToSort, numTeams);
+                        ArrayList<Team> teams = sorter.makeTeams();
+                        
+                        Writer writer = new Writer(teams,outputPath);
+                        writer.write();
+                        Desktop.getDesktop().open(new File(outputPath));
 			
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this, "IOException thrown while reading input file", "Error", JOptionPane.ERROR_MESSAGE);
 		}
+		
     }//GEN-LAST:event_goButtonActionPerformed
 
     public static void main(String args[]) {

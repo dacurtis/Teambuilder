@@ -12,7 +12,8 @@ public class Person
 	String email;
 	int ranking;
 	private ArrayList<String> requestedPeople;
-    ArrayList<Person> network;
+        ArrayList<Person> network;
+        boolean networked;
     boolean isLeader;
 	
 	public Person(String name, String email,  int ranking) {
@@ -46,6 +47,6 @@ public class Person
 	
 	//Will possibly be used to see if the request is mutual.
 	public boolean hasRequestedPerson(Person p){
-		return requestedPeople.contains(p);
+		return network.contains(p);
 	}
 }

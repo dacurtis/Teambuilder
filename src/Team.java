@@ -17,10 +17,10 @@ public  class Team {
             if (person.isLeader())
                 leaders++;
         }
-        public Person removeMember(String person){
+        public Person removeMember(Person person){
             for (int i = 0; i < members.size();i++){
                 Person member = members.get(i);
-                if (member.getName().equals(person)){
+                if (member.equals(person)){
                     value -= member.getRanking();
                     if (member.isLeader())
                         leaders--;

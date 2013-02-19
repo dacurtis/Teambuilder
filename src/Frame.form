@@ -29,9 +29,9 @@
                   <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="outputFileLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="outputFileLabel" min="-2" pref="51" max="-2" attributes="0"/>
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                          <Component id="inputFileLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="inputFileLabel" alignment="0" min="-2" pref="77" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -60,14 +60,14 @@
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="inputFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputFileLabel" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
                   <Component id="inputFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="outputFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="outputFileLabel" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
                   <Component id="outputFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>

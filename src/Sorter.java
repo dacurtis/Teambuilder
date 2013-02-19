@@ -2,8 +2,10 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-
+/**
+ *
+ * @author David Curtis
+ */
 public class Sorter {
     private ArrayList<Person> people;
     private ArrayList<Team> teams;
@@ -29,30 +31,42 @@ public class Sorter {
         }
     }
     public static void sortList(ArrayList<Person> people){
-        ArrayList<Person> sorted = new ArrayList<Person>();
-        for(int i = 0; i < people.size();i++){
-            for (int sortedPointer = 0; sortedPointer < sorted.size();sortedPointer++){
-                if (sorted.get(sortedPointer).getRanking() < people.get(i).getRanking()){   
-                    sorted.add(sortedPointer,people.get(i));
-                    break;
-                }
+        //from wikipedia...because why not
+        for (int i = 1; i < people.size(); i++) {
+            //The values in A[ i ] are checked in-order, starting at the second one
+            // save A[i] to make a hole that will move as elements are shifted
+            // the value being checked will be inserted into the hole's final position
+            Person personToInsert = people.get(i);
+            int holePos = i;
+            // keep moving the hole down until the value being checked is larger than 
+            // what's just below the hole <!-- until A[holePos - 1] is <= item -->
+            while (holePos > 0 && personToInsert.ranking > people.get(holePos - 1).ranking) { //value to insert doesn't belong where the hole currently is, so shift 
+                people.set(holePos, people.get(holePos - 1)); //shift the larger value up
+                holePos = holePos - 1;       //move the hole position down
             }
-            sorted.add(people.get(i));
+            // hole is in the right position, so put value being checked into the hole
+            people.set(holePos, personToInsert);
         }
-        people = sorted;
     }
+   //insertionsort
+//THERE IS A FUCKING BUG HERE SOMEWHERE DAMMIT WIKIPEDIA
     private void sortTeams() {
-        ArrayList<Team> sorted = new ArrayList<Team>();
-        for (int i = 0; i < teams.size(); i++) {
-            for (int sortedPointer = 0; sortedPointer < sorted.size(); sortedPointer++) {
-                if (sorted.get(sortedPointer).value < teams.get(i).value) {
-                    sorted.add(sortedPointer, teams.get(i));
-                    break;
-                }
+        //from wikipedia...because why not
+        for (int i = 1; i < teams.size(); i++) {
+            //The values in A[ i ] are checked in-order, starting at the second one
+            // save A[i] to make a hole that will move as elements are shifted
+            // the value being checked will be inserted into the hole's final position
+            Team teamToInsert = teams.get(i);
+            int holePos = i;
+            // keep moving the hole down until the value being checked is larger than 
+            // what's just below the hole <!-- until A[holePos - 1] is <= item -->
+            while (holePos > 0 && teamToInsert.value > teams.get(holePos - 1).value) { //value to insert doesn't belong where the hole currently is, so shift 
+                teams.set(holePos, teams.get(holePos - 1)); //shift the larger value up
+                holePos = holePos - 1;       //move the hole position down
             }
-            sorted.add(teams.get(i));
+            // hole is in the right position, so put value being checked into the hole
+            teams.set(holePos, teamToInsert);
         }
-        teams = sorted;
     }
     public ArrayList<Team> makeTeams(){
         int counter = 0;
@@ -70,33 +84,38 @@ public class Sorter {
                 flipped = false;
             }
         }
+        //insertionsort, so they are all in order
         sortTeams();
         //step two: make networks
         
         
         //step 3: make swaps
-
-        while (!isDone()) {
-            Team highest = teams.get(0);
-            Team lowest = teams.get(teams.size() - 1);
-            for (int i = 0; i < teams.size() - 1; i++) {
-
-            }
+        int count = 1000;
+        while (!isDone() && count > 0 && swapEngine(0,teams.size()-1));
+ 
+        swapForRequest();
+        sortTeams();
+        for (Team team : teams){
+            
+            sortList(team.members);
+            System.out.println(team.value);
         }
-        
-        
+             
         return teams;
+    }
+    private boolean swapEngine(int high, int low){
+        Team highest = teams.get(high);
+        Team lowest = teams.get(low);
+        if (highest.value - lowest.value <= 1)
+            return false;
+        if(!softSwap(highest,lowest)){
+            return swapEngine(high+1,low) && swapEngine(high,low-1);
+        }
+        return true;
     }
     private boolean softSwap(Team highest, Team lowest) {
         int difference = highest.value - lowest.value;
         int advantage = highest.members.size() - lowest.members.size();
-//        int hStart = 0;
-//        int lStart = 0;
-//        //don't swap away all of a team's leaders
-//        if (highest.leaders == 1)
-//            hStart = 1;
-//        if (lowest.leaders == 1)
-//            lStart = 1;
         
         //Maps scores to possible groups of members
         HashMap highMap = new HashMap();
@@ -107,26 +126,97 @@ public class Sorter {
         for (Person member: highest.members){
             highMap.put(member.ranking, member);
         }
-        for(Object key : highMap.keySet()){
-            Integer keyVal = (Integer) key;
+        for(Object keyVal : lowMap.keySet()){
+            Integer key = (Integer) keyVal;
+            for(int i = 1; i < difference/2 +1;i++)
+                if (highMap.containsKey(key + i)){
+                    if(swap(highest,lowest,(Person)highMap.get(key + i),(Person)lowMap.get(key)))
+                        return true;
+                }               
         }
-        //look through tables, try to find an instance where we can perform a valid swap, would be faster to do backwards
-        //the higher valued team has more people
-        /*
-        for (int i = 0; i < highTable.length; i++) 
-            for (int j = 0; j < highTable[i].length; j++) 
-                for (int x = i + 1; x < lowTable.length && x < i + difference/2 + 1; x++) 
-                    for (int y = 0; y < j + advantage; y++) 
-                        if(highTable[i][j] && lowTable[x][y]){
-                            //Target found! now we have to do the swapping
-                            
+        //HARD CODING I AM SORRY BUT I DGAF
+        //do a 2 for 1 swap 
+        HashMap highGroup = new HashMap();
+        HashMap lowGroup = new HashMap();
+        if(advantage > 0)
+            for(Person p : highest.members)
+              for(Object keyVal : highMap.keySet()){
+                Integer key = (Integer) keyVal;
+                if (highMap.get(keyVal).equals(p))
+                    continue;
+                Group g = new Group((Person)highMap.get(key),p);
+                highGroup.put((Integer)key + p.ranking, g);
+                for(int i = 1; i < difference/2 +1;i++)  
+                    if (lowMap.containsKey(key + p.ranking - i)){
+                        if(swap(highest,lowest,g,new Group((Person)lowMap.get(key + p.ranking - i))))
+                            return true;
                     }
-         * 
-         */
-
+            }
+        else if(advantage < 0)
+            for(Person p : highest.members)
+              for(Object keyVal : highMap.keySet()){
+                Integer key = (Integer) keyVal;
+                if (highMap.get(keyVal).equals(p))
+                    continue;
+                Group g = new Group((Person)highMap.get(key),p);
+                lowGroup.put((Integer)key + p.ranking, g);
+                for(int i = 1; i < difference/2 +1;i++)
+                    if (lowMap.containsKey(key + p.ranking - i)){
+                        if(swap(highest,lowest,g,new Group((Person)lowMap.get(key))))
+                            return true;
+                    }
+              }
+        else
+              for(Object keyVal : highGroup.keySet()){
+                Integer key = (Integer) keyVal;
+                for(int i = 1; i < difference/2 +1;i++)
+                    if (lowMap.containsKey(key - i)){
+                        if(swap(highest,lowest,(Group)highGroup.get(keyVal),(Group)lowGroup.get(key - i)))
+                            return true;
+                    }
+              }
         return false;
     }
+    private void swapForRequest() {
+        for(int i =0; i < teams.size();i++){
+            for(int j = 0; j < teams.get(j)){
+                
+            }
+        }
+    }
+    private boolean swap(Team highest, Team lowest, Person highPlayer, Person lowPlayer) {
+        if(highPlayer.isLeader && highest.leaders == 1 && !lowPlayer.isLeader)
+            return false;
+        lowest.addMember(highPlayer);
+        highest.addMember(lowPlayer);
+        lowest.removeMember(lowPlayer);
+        highest.removeMember(highPlayer);
+        return true;
+    }
+    private boolean swap(Team highest, Team lowest, Group highPlayers, Group lowPlayers) {
+        int hLeaders = 0;
+        int lLeaders = 0;
+        for(int i =0; i < highPlayers.group.length;i++){
+            if(highPlayers.group[i].isLeader)
+                hLeaders++;
+        }
+        for(int i =0; i < lowPlayers.group.length;i++){
+            if(lowPlayers.group[i].isLeader)
+                lLeaders++;
+        }
+        if (lLeaders + highest.leaders - hLeaders == 0 || hLeaders + lowest.leaders - lLeaders ==0)
+                return false;
+        for(Person highPlayer: highPlayers.group)
+            lowest.addMember(highPlayer);
+        for(Person lowPlayer: lowPlayers.group){
+            highest.addMember(lowPlayer);
+            lowest.removeMember(lowPlayer);
+        }
+        for(Person highPlayer: highPlayers.group)
+            highest.removeMember(highPlayer);
 
+        return true;
+    }
     private boolean isDone(){
         for (Team team : teams){
             if(team.value != teamScore && team.value != teamScore + 1)
@@ -134,8 +224,13 @@ public class Sorter {
         }
         return true;
     }
-    class Group{
-        ArrayList<Person> group;
+
+
+    class Group {
+        Person[] group;
+        private Group(Person... people) {
+            group = people;
+        }
         
     }
     
