@@ -18,6 +18,12 @@ public class Main {
 			//in the spreadsheet.
 			List<String[]> fileContents = csvParser.readAll();
 			
+			
+			//DEBUGGING PURPOSES: DELETE AFTERWARDS.
+			for (String[] strings : fileContents) {
+				System.out.println(strings[0]);
+			}
+			
 			//Need to call parser method to parse information.
 			Parser toParse = new Parser(fileContents);
 			
