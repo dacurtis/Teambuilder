@@ -17,6 +17,8 @@ public class Parser {
 		//name, with the 3rd column being the email address.
 		//Trim removes the leading and trailing whitespace, if any. 
 		
+		int columnNumberOfRequstedPeople = findColumnWithRequestedPeople();
+		
 		//Need to add in code for adding people's requests.
 		for (int i = 1; i < fileToParse.size(); i++) {
 			String[] containsRow = fileToParse.get(i);
@@ -33,26 +35,17 @@ public class Parser {
 			String email = scanRow.next();
 			email = email.trim();
 			
-			//Temporarily set the ranking to 0 to check for later.
-			int ranking = 0;
-			
 			//Temp will hold the last value in the csv file, this variable will
 			//be checked later to see if there is a valid ranking or not. 
 			String temp = "";
-			
 			
 			//Get the last value in the csv file.
 			do {
 				temp = scanRow.next();
 			}
 			while (scanRow.hasNext());
-			
-			//Keep the ranking of of 0 if the temp value isn't a ranking or is 0.
-			try{
-				ranking = Integer.parseInt(temp);
-			} catch (NumberFormatException e) {
-				
-			}
+
+			int ranking = checkRanking(temp);
 			
 			//Don't make a person if the ranking is 0. (Means that the person
 			//didn't have a ranking or the ranking was 0, both of which are
@@ -61,10 +54,40 @@ public class Parser {
 				Person personToAdd = new Person(name, email, ranking);
 				arrayOfPeople.add(personToAdd);
 			}
+			
+			//Close the scanner.
+			scanRow.close();
 		}
 		
-		//Things to look into: Determining if the comma is referring to the 
-		//column split or the comma in the column.
 		return arrayOfPeople;
+	}
+	
+	private int findColumnWithRequestedPeople(){
+		int columnNumber = 0;
+		
+		String[] firstRow = fileToParse.get(0);
+		
+		Scanner scanFirstRow = new Scanner(firstRow[0]);
+		String checkCell = "";
+		
+		do{
+			checkCell = scanFirstRow.next();
+			columnNumber++;
+			if (checkCell.equals("List any preferred team member(s) here")){
+				break;
+			}
+		} while (scanFirstRow.hasNext());
+		
+		scanFirstRow.close();
+		return columnNumber;
+	}
+	
+	private int checkRanking(String rankToCheck){
+		//Keep the ranking of of 0 if the temp value isn't a ranking or is 0.
+		try{
+			return Integer.parseInt(rankToCheck);
+		} catch (NumberFormatException e) {
+			return 0;
+		}
 	}
 }
