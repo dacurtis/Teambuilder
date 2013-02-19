@@ -89,7 +89,7 @@ public class Sorter {
     }
     private boolean softSwap(Team highest, Team lowest) {
         int difference = highest.value - lowest.value;
-        int numAdvantage = highest.members.size() - lowest.members.size();
+        int advantage = highest.members.size() - lowest.members.size();
 //        int hStart = 0;
 //        int lStart = 0;
 //        //don't swap away all of a team's leaders
@@ -99,13 +99,34 @@ public class Sorter {
 //            lStart = 1;
         
         //Maps scores to possible groups of members
-        HashMap lowScoreMap = new HashMap();
-        HashMap highScoreArray = new HashMap();
-        for(int i =0; i < lowest.members.size();i++){
-            lowScoreMap.put(lowest.members.get(i).ranking, lowest.members.get(i));
+        HashMap highMap = new HashMap();
+        HashMap lowMap = new HashMap();
+        for (Person member: lowest.members){
+            lowMap.put(member.ranking, member);
         }
+        for (Person member: highest.members){
+            highMap.put(member.ranking, member);
+        }
+        for(Object key : highMap.keySet()){
+            Integer keyVal = (Integer) key;
+        }
+        //look through tables, try to find an instance where we can perform a valid swap, would be faster to do backwards
+        //the higher valued team has more people
+        /*
+        for (int i = 0; i < highTable.length; i++) 
+            for (int j = 0; j < highTable[i].length; j++) 
+                for (int x = i + 1; x < lowTable.length && x < i + difference/2 + 1; x++) 
+                    for (int y = 0; y < j + advantage; y++) 
+                        if(highTable[i][j] && lowTable[x][y]){
+                            //Target found! now we have to do the swapping
+                            
+                    }
+         * 
+         */
+
         return false;
     }
+
     private boolean isDone(){
         for (Team team : teams){
             if(team.value != teamScore && team.value != teamScore + 1)
@@ -113,9 +134,8 @@ public class Sorter {
         }
         return true;
     }
-    class ScoreMap{
-        int[] scores;
-        
+    class Group{
+        ArrayList<Person> group;
         
     }
     
