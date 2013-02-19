@@ -16,6 +16,10 @@ public class Parser {
 	public ArrayList<Person> parseForPeople() {
 		ArrayList<Person> arrayOfPeople = new ArrayList<Person>();
 		
+		//Will be one less than it actually is since reading array indecies
+		//(which start at 0).
+		int columnWithRequestedNames = findColumnWithRequestedPeople();
+		
 		//Making the assumption that the 2nd column in the csv file is the
 		//name, with the 3rd column being the email address.
 		//Trim removes the leading and trailing whitespace, if any. 
@@ -29,6 +33,9 @@ public class Parser {
 			int ranking = checkRanking(stringRanking);
 			
 			Person personToAdd = new Person(name, email, ranking);
+			
+			System.out.println(row[columnWithRequestedNames]);
+			
 			arrayOfPeople.add(personToAdd);
 		}
 		
@@ -36,7 +43,14 @@ public class Parser {
 	}
 	
 	private int findColumnWithRequestedPeople(){
-		return 0;
+		String[] firstRow = fileContents.get(0);
+		int i = 0;
+		for(; i < firstRow.length; i++){
+			if(firstRow[i].equals("List any preferred team member(s) here")){
+				break;
+			}
+		}
+		return i;
 	}
 	
 	private int checkRanking(String rankToCheck){
