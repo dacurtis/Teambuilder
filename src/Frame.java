@@ -1,6 +1,4 @@
 
-import com.googlecode.jcsv.reader.CSVReader;
-import com.googlecode.jcsv.reader.internal.CSVReaderBuilder;
 import java.awt.FileDialog;
 import java.io.FileReader;
 import java.io.IOException;
@@ -154,17 +152,17 @@ public class Frame extends javax.swing.JFrame {
         }
          try {
         	FileReader file = new FileReader(inputPath);
-			CSVReader<String[]> csvParser = CSVReaderBuilder.newDefaultReader(file);
-			
-			//List of String[], at index 0 of the String[], it will contain all
-			//the information in a row. So each String[0] is equavialent to a row
-			//in the spreadsheet.
-			List<String[]> fileContents = csvParser.readAll();
-			
-			//Need to call parser method to parse information.
-			Parser toParse = new Parser(fileContents);
-			
-			ArrayList<Person> peopleToSort = toParse.parseForPeople();
+//			CSVReader<String[]> csvParser = CSVReaderBuilder.newDefaultReader(file);
+//			
+//			//List of String[], at index 0 of the String[], it will contain all
+//			//the information in a row. So each String[0] is equavialent to a row
+//			//in the spreadsheet.
+//			List<String[]> fileContents = csvParser.readAll();
+//			
+//			//Need to call parser method to parse information.
+//			Parser toParse = new Parser(fileContents);
+//			
+//			ArrayList<Person> peopleToSort = toParse.parseForPeople();
 			
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this, "IOException thrown while reading input file", "Error", JOptionPane.ERROR_MESSAGE);
