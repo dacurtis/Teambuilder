@@ -47,13 +47,13 @@ public class Parser {
 			
 			arrayOfPeople.add(personToAdd);
 		}
-		for (Person person : arrayOfPeople){
-                    for(String name : person.getRequested())
-                        for(Person p : arrayOfPeople)
-                            if(p.name.equals(name))
-                                person.network.add(p);
+//		for (Person person : arrayOfPeople)
+//                    for(String name : person.getRequested())
+//                        for(Person p : arrayOfPeople)
+//                            if(p.name.equals(name))
+//                                person.network.add(p);
                        
-                }
+                
 		return arrayOfPeople;
 	}
 	

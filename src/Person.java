@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /* Person.java
  * 
@@ -11,9 +13,8 @@ public class Person
 	String name;
 	String email;
 	int ranking;
-	private ArrayList<String> requestedPeople;
-        ArrayList<Person> network;
-        boolean networked;
+	HashSet<String> requestedPeople;
+        HashSet<Person> network;
     boolean isLeader;
 	
 	public Person(String name, String email,  int ranking) {
@@ -22,7 +23,8 @@ public class Person
 		this.ranking = ranking;
                 if (ranking > 4)
                     isLeader = true;
-		this.requestedPeople = new ArrayList<String>();
+		this.requestedPeople = new HashSet<String>();
+                network = new HashSet<Person>();
 	}
 	
 	public String getName() {
@@ -35,7 +37,7 @@ public class Person
 		return ranking;
 	}
 	
-	public ArrayList<String> getRequested(){
+	public HashSet<String> getRequested(){
 		return requestedPeople;
 	}
 	public String getEmail(){
@@ -47,6 +49,11 @@ public class Person
 	
 	//Will possibly be used to see if the request is mutual.
 	public boolean hasRequestedPerson(Person p){
-		return network.contains(p);
+            Iterator it = requestedPeople.iterator();
+            while (it.hasNext()){
+                if(((String)it.next()).toLowerCase().trim().equals(p.name.toLowerCase().trim()))
+                        return true;
+            }
+            return false;
 	}
 }
