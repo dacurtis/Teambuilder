@@ -86,6 +86,7 @@ public class Sorter {
             }
         }
         //insertionsort, so they are all in order
+        //The lists should always be very small, so the overhead of more complex sorting methods is not necessary
         sortTeams();
 
         
@@ -116,6 +117,7 @@ public class Sorter {
              
         return teams;
     }
+    //Tries to swap the most stacked team with the least stacked team, if that doesnt work moves inwards
     private boolean swapEngine(int high, int low){
         Team highest = teams.get(high);
         Team lowest = teams.get(low);
@@ -126,6 +128,7 @@ public class Sorter {
         }
         return true;
     }
+    //Attempts to make swaps, some hard coded stuff should be fixed
     private boolean softSwap(Team highest, Team lowest) {
         int difference = highest.value - lowest.value;
         int advantage = highest.members.size() - lowest.members.size();
@@ -197,6 +200,7 @@ public class Sorter {
               }
         return false;
     }
+    //Look for groups of friends, swap friends onto same teams if possible without unbalancing teams
     private boolean swapForRequest() {
         for(Team team : teams)
             calcConnections(team);
@@ -208,6 +212,7 @@ public class Sorter {
                         for(int j =0; j < teams.get(t2).members.size();j++){
                             Person member2 = teams.get(t2).members.get(j);
                             if (member1.hasRequestedPerson(member2))
+                                //does the work
                                 if(requestSwap(team1,teams.get(t2),member1,member2))
                                     return true;
                         }
@@ -269,7 +274,6 @@ public class Sorter {
         }
         return false;
     }
-           
     
     private HashMap formGroups(Team team){
         HashSet<Integer> indices = new HashSet<Integer>();
@@ -344,9 +348,11 @@ public class Sorter {
         highest.removeMember(highPlayer);
         return true;
     }
+    //makes the swap if it is valid, returns its validity
     private boolean swap(Team highest, Team lowest, Group highPlayers, Group lowPlayers) {
         int hLeaders = 0;
         int lLeaders = 0;
+        //find group leaders, each team must have a leader
         for(int i =0; i < highPlayers.group.length;i++){
             if(highPlayers.group[i].isLeader)
                 hLeaders++;
@@ -355,6 +361,7 @@ public class Sorter {
             if(lowPlayers.group[i].isLeader)
                 lLeaders++;
         }
+        //If this swap will leave a team without a leader, don't do it
         if (lLeaders + highest.leaders - hLeaders == 0 || hLeaders + lowest.leaders - lLeaders ==0)
                 return false;
         for(Person highPlayer: highPlayers.group)
